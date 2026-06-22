@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказ Ассасинов | Minecraft RP</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        
+        body {
+            background-color: #1a1a1a;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://www.transparenttextures.com/patterns/dark-matter.png');
+            color: #ffffff;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-shadow: 2px 2px 0px #3f3f3f;
+        }
+
+        
+        .minecraft-gui {
+            background-color: #c6c6c6;
+            border: 4px solid #555555;
+            border-top-color: #ffffff;
+            border-left-color: #ffffff;
+            padding: 25px;
+            width: 460px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            color: #ffaa00;
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0px #2a1a00;
+            line-height: 1.4;
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px; 
+        }
+
+        
+        .title-icon {
+            width: 32px;
+            height: 32px;
+            image-rendering: pixelated; 
+            user-select: none;
+        }
+
+        
+        .stats-box {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 9px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .stat-label.completed {
+            color: #55ff55; /* Зеленый */
+            text-shadow: 1px 1px 0px #002a00;
+        }
+
+        .stat-label.pending {
+            color: #ff5555; /* Красный */
+            text-shadow: 1px 1px 0px #2a0000;
+        }
+
+        .stat-value {
+            font-size: 14px;
+            color: #ffffff;
+            text-shadow: 2px 2px 0px #000000;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #373737;
+            text-shadow: none;
+            font-size: 10px;
+        }
+
+        
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            background-color: #000000;
+            color: #ffffff;
+            border: 3px solid #555555;
+            border-top-color: #a8a8a8;
+            border-left-color: #a8a8a8;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: #55ff55;
+        }
+
+       
+        .info-box {
+            background-color: #000000;
+            border: 3px solid #555555;
+            border-top-color: #a8a8a8;
+            border-left-color: #a8a8a8;
+            padding: 15px;
+            text-align: left;
+            box-sizing: border-box;
+        }
+
+       
+        .desc-box {
+            margin-top: 20px;
+        }
+
+        .desc-title {
+            color: #55ff55; 
+            font-size: 10px;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 0px #002a00;
+        }
+
+        .desc-value {
+            color: #e0e0e0;
+            font-size: 9px;
+            line-height: 1.6;
+            text-shadow: 1px 1px 0px #202020;
+        }
+
+        
+        .price-box {
+            margin-top: 12px;
+            margin-bottom: 20px;
+        }
+
+        .price-title {
+            color: #ffff55; 
+            font-size: 10px;
+            margin-bottom: 12px;
+            text-shadow: 1px 1px 0px #2a2a00;
+        }
+
+        
+        .price-value {
+            color: #55ffff;
+            font-size: 11px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 1px 1px 0px #002a2a;
+        }
+
+        
+        .price-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .item-icon {
+            width: 24px;
+            height: 24px;
+            image-rendering: pixelated; 
+            vertical-align: middle;
+        }
+
+        .price-separator {
+            color: #aaaaaa;
+            margin: 0 4px;
+        }
+
+       
+        .mc-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #9e9e9e;
+            border: 3px solid #5e5e5e;
+            border-top-color: #ffffff;
+            border-left-color: #ffffff;
+            color: #e0e0e0;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 11px;
+            cursor: pointer;
+            text-shadow: 2px 2px 0px #373737;
+        }
+
+        .mc-button:hover {
+            background-color: #5c8e32;
+            border-color: #2e4e12;
+            border-top-color: #a1db66;
+            border-left-color: #a1db66;
+            color: #ffffff;
+        }
+
+        .mc-button:active {
+            border-top-color: #2e4e12;
+            border-left-color: #2e4e12;
+            border-bottom-color: #ffffff;
+            border-right-color: #ffffff;
+        }
+
+       
+        .alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.85); 
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; 
+        }
+
+        .alert-box {
+            background-color: #c6c6c6;
+            border: 4px solid #555555;
+            border-top-color: #ffffff;
+            border-left-color: #ffffff;
+            padding: 20px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0px 0px 30px rgba(0, 0, 0, 1);
+        }
+
+        .alert-title {
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 0px #3f3f3f;
+        }
+
+        .alert-message {
+            color: #373737;
+            font-size: 10px;
+            line-height: 1.6;
+            text-shadow: none;
+            margin-bottom: 20px;
+        }
+
+        .alert-button {
+            width: 120px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="minecraft-gui">
+    <h1>
+        <img src="img/Enchanted_Netherite_Sword.gif" class="title-icon" alt="Меч">
+        ЗАКАЗАТЬ УБИЙСТВО
+        <img src="img/Mace_JE1_BE1.png" class="title-icon" alt="Булава">
+    </h1>
+    
+    <div class="info-box stats-box">
+        <div class="stat-item">
+            <span class="stat-label completed">ВЫПОЛНЕНО УБИЙСТВ:</span>
+            <span class="stat-value">4</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label pending">НЕВЫПОЛНЕНО:</span>
+            <span class="stat-value">0</span>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label for="serviceInput">ВЫБЕРИТЕ УСЛУГУ:</label>
+        <select id="serviceInput">
+            <option value="Обычное убийство">Простое убийство</option>
+            <option value="Убийство с получением вещей">Убийство с вещами</option>
+            <option value="Защита от простого убийства">Защита от простого убийства</option>
+            <option value="Защита от не простого убийства">Защита от убийства с вещами</option>
+            <option value="Телохранитель">Телохранитель</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="targetInput">НИКНЕЙМ ЦЕЛИ:</label>
+        <input type="text" id="targetInput" placeholder="Например: Chmel1" autocomplete="off">
+    </div>
+
+    <div class="info-box desc-box">
+        <div class="desc-title">ОПИСАНИЕ КОНТРАКТА:</div>
+        <div id="descDisplay" class="desc-value">Загрузка описания...</div>
+    </div>
+
+    <div class="info-box price-box">
+        <div class="price-title">СТОИМОСТЬ КОНТРАКТА:</div>
+        <div id="priceDisplay" class="price-value">Загрузка цены...</div>
+    </div>
+
+    <button class="mc-button" onclick="sendOrder()">ОТПРАВИТЬ ЗАКАЗ</button>
+</div>
+
+<div id="customAlert" class="alert-overlay">
+    <div class="alert-box">
+        <div id="alertTitle" class="alert-title">УВЕДОМЛЕНИЕ</div>
+        <div id="alertMessage" class="alert-message">Текст сообщения</div>
+        <button class="mc-button alert-button" onclick="closeAlert()">ОК</button>
+    </div>
+</div>
+
+<script>
+  
+  const descList = {
+    "Обычное убийство": "Классический заказ. Выслеживаем цель, ликвидируем в кратчайшие сроки. Все ресурсы жертвы остаются на месте её гибели.",
+    "Убийство с получением вещей": "Полная ликвидация цели с последующим сбором всего её инвентаря. Все выбитые ресурсы будут переданы лично вам.(если убийце что то пригленется он может забрать некоторые предметы)",
+    "Защита от простого убийства": "Ваше имя вносится в белый список. То есть на вас не будет действовать два заказа простого убийства если таковой на вас будет совершен",
+    "Защита от не простого убийства": "Мы гарантируем, что никто не сможет нанять нас для охоты за вашей головой и вашими ценными вещами.(Защита от 2 убийств с вещами)",
+    "Телохранитель": "Максимальный иммунитет.Сопровождение в опасных зонах, шахтах или во время войны. Защита от любых агрессивных игроков в реальном времени.(на 3 дня, может больше по договоренности)"
+  };
+
+  
+  const priceList = {
+    "Обычное убийство": `
+        <div class="price-item">16x <img src="img/diamond_block.png" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <div class="price-item">4x <img src="img/netherite_ingot.png" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <div class="price-item">2x <img src="img/enchanted_apple.gif" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <span>договорная</span>
+    `,
+    "Убийство с получением вещей": `
+        <div class="price-item">67x <img src="img/diamond_block.png" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <div class="price-item">16x <img src="img/netherite_ingot.png" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <div class="price-item">8x <img src="img/enchanted_apple.gif" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <span>договорная</span>
+    `,
+    "Защита от простого убийства": `
+        <div class="price-item">24x <img src="img/diamond_block.png" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <div class="price-item">6x <img src="img/netherite_ingot.png" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <div class="price-item">3x <img src="img/enchanted_apple.gif" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <span>договорная</span>
+    `,
+    "Защита от не простого убийства": `
+        <div class="price-item">82x <img src="img/diamond_block.png" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <div class="price-item">20x <img src="img/netherite_ingot.png" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <div class="price-item">10x <img src="img/enchanted_apple.gif" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <span>договорная</span>
+    `,
+    "Телохранитель": `
+        <div class="price-item">64x6 <img src="img/diamond_block.png" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <div class="price-item">10x <img src="img/netherote_block.png" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <div class="price-item">42x <img src="img/enchanted_apple.gif" class="item-icon"></div>
+        <span class="price-separator">/</span>
+        <span>договорная</span>
+    `
+  };
+
+  const serviceSelect = document.getElementById('serviceInput');
+  const priceDisplay = document.getElementById('priceDisplay');
+  const descDisplay = document.getElementById('descDisplay');
+
+  // Функции кастомного алерта
+  function showCustomAlert(title, message, type = 'success') {
+      const alertBox = document.getElementById('customAlert');
+      const alertTitle = document.getElementById('alertTitle');
+      const alertMessage = document.getElementById('alertMessage');
+
+      alertTitle.textContent = title;
+      alertMessage.textContent = message;
+
+      if (type === 'error') {
+          alertTitle.style.color = '#ff5555'; 
+      } else if (type === 'success') {
+          alertTitle.style.color = '#55ff55'; 
+      } else {
+          alertTitle.style.color = '#ffaa00'; 
+      }
+
+      alertBox.style.display = 'flex';
+  }
+
+  function closeAlert() {
+      document.getElementById('customAlert').style.display = 'none';
+  }
+
+
+  function updateServiceDetails() {
+    const selectedService = serviceSelect.value;
+    descDisplay.textContent = descList[selectedService];
+    priceDisplay.innerHTML = priceList[selectedService];
+  }
+
+  serviceSelect.addEventListener('change', updateServiceDetails);
+  updateServiceDetails();
+
+  
+  function sendOrder() {
+    const service = serviceSelect.value;
+    const target = document.getElementById('targetInput').value.trim();
+    
+    if(!target) {
+        showCustomAlert("ОШИБКА", "Вы не ввели никнейм цели!", "error");
+        return;
+    }
+    
+    const forbiddenCharsRegex = /[^a-zA-Z0-9_]/;
+    if (forbiddenCharsRegex.test(target)) {
+        showCustomAlert(
+            "ОБНАРУЖЕН ХАКЕР", 
+            "Ввод спецсимволов запрещен системой безопасности ассасинов!", 
+            "error"
+        );
+        return; 
+    }
+    
+    if (target.length < 3 || target.length > 16) {
+        showCustomAlert(
+            "НЕКОРРЕКТНЫЙ ВВОД", 
+            "Никнейм должен содержать от 3 до 16 символов.", 
+            "warning" 
+        );
+        return;
+    }
+    
+    showCustomAlert("ОТПРАВКА", "Вороны несут ваше послание...", "warning");
+    
+    const googleAppUrl = 'https://script.google.com/macros/s/AKfycbwJcJBfW4X5Q__GUYPXnk7iYKwtsbLTYLQlfNlEt7_xu50nuElo1LjXth_pZ7z9cGe3tQ/exec';
+    
+    const formData = new FormData();
+    formData.append('service', service);
+    formData.append('target', target);
+    
+    fetch(googleAppUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    })
+    .then(response => {
+        showCustomAlert("КОНТРАКТ ПРИНЯТ", "Заказ успешно передан! Если оплата внесена убийца уже выехал за целью.", "success");
+        document.getElementById('targetInput').value = '';
+    })
+    .catch(error => {
+        showCustomAlert("СБОЙ СВЯЗИ", "Произошла ошибка при отправке заказа.", "error");
+    });
+  }
+</script>
+
+</body>
+</html>
