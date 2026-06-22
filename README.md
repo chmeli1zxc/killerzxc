@@ -1,2 +1,0 @@
-# killerzxc
-123qweqwewqewqeq
