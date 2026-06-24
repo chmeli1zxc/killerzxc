@@ -296,7 +296,7 @@
 <body>
 
 <div id="loadingScreen">
-    <div class="loading-text">ЗАГРУЗКА ИНТЕРФЕЙСА...<br><br>ПОДКЛЮЧЕНИЕ К СЕТИ</div>
+    <div class="loading-text">ЗАГРУЗКА ИНТЕРФЕЙСА...<br><br>ПОДКЛЮЧЕНИЕ К СЕТИ АССАСИНОВ</div>
 </div>
 
 <div class="minecraft-gui">
@@ -329,8 +329,18 @@
     </div>
 
     <div class="form-group">
+    <label for="customerInput">ВАШ НИКНЕЙМ:</label>
+    <input
+        type="text"
+        id="customerInput"
+        placeholder="Например: Chmel1"
+        autocomplete="off"
+    >
+    </div>
+
+    <div class="form-group">
         <label for="targetInput">НИКНЕЙМ ЦЕЛИ:</label>
-        <input type="text" id="targetInput" placeholder="Например: Chmel1" autocomplete="off">
+        <input type="text" id="targetInput" placeholder="Например: andedz" autocomplete="off">
     </div>
 
     <div class="info-box desc-box">
@@ -455,6 +465,10 @@
       document.getElementById('customAlert').style.display = 'none';
   }
 
+  function isValidMinecraftNickname(nickname) {
+    return /^[a-zA-Z0-9_]{3,16}$/.test(nickname);
+    }
+
   function updateServiceDetails() {
     const selectedService = serviceSelect.value;
     descDisplay.textContent = descList[selectedService];
@@ -467,21 +481,32 @@
   function sendOrder() {
     const service = serviceSelect.value;
     const target = document.getElementById('targetInput').value.trim();
+    const customer = document.getElementById('customerInput').value.trim();
     
     if(!target) {
         showCustomAlert("ОШИБКА", "Вы не ввели никнейм цели!", "error");
         return;
     }
     
-    const forbiddenCharsRegex = /[^a-zA-Z0-9_]/;
-    if (forbiddenCharsRegex.test(target)) {
-        showCustomAlert(
-            "ОБНАРУЖЕН ХАКЕР", 
-            "Ввод спецсимволов запрещен системой!", 
-            "error"
-        );
-        return; 
-    }
+    
+    
+    if (!isValidMinecraftNickname(customer)) {
+    showCustomAlert(
+        'НЕКОРРЕКТНЫЙ НИК',
+        'Ваш ник должен содержать от 3 до 16 английских букв, цифр или символ _',
+        'warning'
+    );
+    return;
+}
+
+if (!isValidMinecraftNickname(target)) {
+    showCustomAlert(
+        'НЕКОРРЕКТНЫЙ НИК',
+        'Ник цели должен содержать от 3 до 16 английских букв, цифр или символ _',
+        'warning'
+    );
+    return;
+}
     
     if (target.length < 3 || target.length > 16) {
         showCustomAlert(
@@ -494,19 +519,22 @@
     
     showCustomAlert("ОТПРАВКА", "Вороны несут ваше послание...", "warning");
     
-    const googleAppUrl = 'https://script.google.com/macros/s/AKfycbwJcJBfW4X5Q__GUYPXnk7iYKwtsbLTYLQlfNlEt7_xu50nuElo1LjXth_pZ7z9cGe3tQ/exec';
+    const googleAppUrl = 'https://script.google.com/macros/s/AKfycbynm6MCfocJNX-V8wDLEp-RJaH-nDgPgH4_cRA3AAaHQGkZJfF67IeMAuWhWJ5tHJPxfg/exec';
     
     const formData = new FormData();
     formData.append('service', service);
     formData.append('target', target);
+    formData.append('customer', customer);
     
     fetch(googleAppUrl, {
       method: 'POST',
+      mode: 'no-cors',
       body: formData
     })
     .then(response => {
         showCustomAlert("КОНТРАКТ ПРИНЯТ", "Заказ успешно передан! Если оплата внесена убийца уже выехал за целью.", "success");
         document.getElementById('targetInput').value = '';
+        document.getElementById('customerInput').value ='';
     })
     .catch(error => {
         showCustomAlert("СБОЙ СВЯЗИ", "Произошла ошибка при отправке заказа.", "error");
