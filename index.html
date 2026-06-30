@@ -328,7 +328,7 @@
         </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" >
     <label for="customerInput">ВАШ НИКНЕЙМ:</label>
     <input
         type="text"
@@ -338,7 +338,7 @@
     >
     </div>
 
-    <div class="form-group">
+    <div class="form-group" id="targetGroup"> 
         <label for="targetInput">НИКНЕЙМ ЦЕЛИ:</label>
         <input type="text" id="targetInput" placeholder="Например: andedz" autocomplete="off">
     </div>
@@ -441,6 +441,7 @@
   const serviceSelect = document.getElementById('serviceInput');
   const priceDisplay = document.getElementById('priceDisplay');
   const descDisplay = document.getElementById('descDisplay');
+    const targetGroup = document.getElementById('targetGroup');
 
   function showCustomAlert(title, message, type = 'success') {
       const alertBox = document.getElementById('customAlert');
@@ -473,18 +474,38 @@
     const selectedService = serviceSelect.value;
     descDisplay.textContent = descList[selectedService];
     priceDisplay.innerHTML = priceList[selectedService];
+
+      if (
+    selectedService === "Защита от простого убийства" ||
+    selectedService === "Защита от не простого убийства" ||
+    selectedService === "Телохранитель"
+) {
+    targetGroup.style.display = "none";
+    document.getElementById("targetInput").value = "";
+} else {
+    targetGroup.style.display = "block";
+}
   }
 
   serviceSelect.addEventListener('change', updateServiceDetails);
   updateServiceDetails();
 
-  function sendOrder() {
+    function sendOrder() {
     const service = serviceSelect.value;
     const target = document.getElementById('targetInput').value.trim();
     const customer = document.getElementById('customerInput').value.trim();
     
-    if(!target) {
-        showCustomAlert("ОШИБКА", "Вы не ввели никнейм цели!", "error");
+    const needTarget =
+    service !== "Защита от простого убийства" &&
+    service !== "Защита от не простого убийства" &&
+    service !== "Телохранитель";
+
+    if (needTarget && !target) {
+        showCustomAlert(
+            "ОШИБКА",
+            "Введите никнейм цели.",
+            "error"
+        );
         return;
     }
     
@@ -499,7 +520,7 @@
     return;
 }
 
-if (!isValidMinecraftNickname(target)) {
+if ( needTarget && !isValidMinecraftNickname(target)) {
     showCustomAlert(
         'НЕКОРРЕКТНЫЙ НИК',
         'Ник цели должен содержать от 3 до 16 английских букв, цифр или символ _',
@@ -508,14 +529,7 @@ if (!isValidMinecraftNickname(target)) {
     return;
 }
     
-    if (target.length < 3 || target.length > 16) {
-        showCustomAlert(
-            "НЕКОРРЕКТНЫЙ ВВОД", 
-            "Никнейм должен содержать от 3 до 16 символов.", 
-            "warning" 
-        );
-        return;
-    }
+    
     
     showCustomAlert("ОТПРАВКА", "Вороны несут ваше послание...", "warning");
     
